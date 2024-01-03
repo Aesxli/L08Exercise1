@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      display: none; /* Hide the body initially */
+    }
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.restart {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.restart:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <div class="about-section" id="about-section">
+    <h1>About Me</h1>
+  </div>
+  
+  <img id="profile-image" src="img/image.jpeg" alt="Alex" style="width:20%; height:20%; opacity: 0; display: none;">
+  <div class="container" id="container" style="display: none;">
+    <h2>Alex Poh</h2>
+    <p class="title">Web Developer</p>
+    <p>Hi, I am Alex, a UI/UX designer, and a web developer currently studying in Republic Polytechnic year 2. My course is digital design and development, which teaches us about the front end and back end of websites and apps.</p>
+    <p>alexpoh642@yahoo.com</p>
+    <p><button class="restart">Restart</button></p>
+  </div>
+
+  <div id="counter" style="text-align: center; padding-bottom:40rem; color: #555; font-size: 24px; display: none;"></div>
+
+  <script>
+    // Flag to track whether the animation has already played
+    let animationPlayed = false;
+
+    // Counter animation
+    const counterAnimation = anime({
+      targets: '#counter',
+      innerHTML: [0, 100],
+      easing: 'linear',
+      round: 1,
+      duration: 3000,
+      update: function(anim) {
+        if (anim.progress < 100) {
+          document.getElementById('counter').style.display = 'block';
+        } else {
+          document.getElementById('counter').style.display = 'none';
+        }
+
+        if (anim.progress === 100 && !animationPlayed) {
+          document.body.style.display = 'block';
+          document.getElementById('profile-image').style.display = 'block';
+          document.getElementById('container').style.display = 'block';
+          aboutTimeline.play();
+          containerTimeline.play();
+          animationPlayed = true;
+        }
+      }
+    });
+
+    // Animation for about-section and profile-image
+    const aboutTimeline = anime.timeline({
+      easing: 'easeInOutQuad',
+      duration: 1000
+    })
+    .add({
+      targets: '#about-section',
+      translateY: [-100, 0],
+      opacity: [0, 1],
+      delay: 500
+    })
+    .add({
+      targets: '#profile-image',
+      translateX: [-100, 0],
+      opacity: [0, 1],
+      offset: '-=500'
+    });
+
+    // Staggered animation for container elements
+    const containerTimeline = anime.timeline({
+      easing: 'easeInOutQuad',
+      duration: 800,
+      delay: 200
+    });
+
+    containerTimeline
+      .add({
+        targets: '#container h2',
+        translateY: [-30, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(100)
+      })
+      .add({
+        targets: '#container .title',
+        translateY: [-30, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(100)
+      })
+      .add({
+        targets: '#container p',
+        translateY: [-30, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(100)
+      })
+      .add({
+        targets: '#container a',
+        translateY: [-30, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(100)
+      });
+
+    // Restart animation on button click
+    document.querySelector('.restart').onclick = function() {
+      counterAnimation.restart();
+      aboutTimeline.restart();
+      containerTimeline.restart();
+      animationPlayed = false; // Reset the flag
+    };
+  </script>
+
+</body>
+</html>
+
+
